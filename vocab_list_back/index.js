@@ -1,19 +1,25 @@
 require('dotenv').config()
 const express = require('express')
-const { Client } = require('pg')
+const { Pool } = require('pg')
+const Router = require('express-promise-router')
 app = express()
-const client = new Client()
+const router = new Router()
 
-await client.connect()
+const pool = new Pool({
+    connectionString: process.env.DB_URI
+})
 
-app.get('/api/cards/:fromIdx&:numCards', (req, res) => {
-    const res = await client.query(
+router.get('/api/cards/:fromIdx&:numCards', async (req, res) => {
+    const qry = await pool.query(
         'SELECT * FROM cards ORDER BY index LIMIT $1::integer OFFSET $2::integer',
         [req.params.numCards, req.params.fromIdx]
     )
+    res.json(qry.rows)
 })
+
+app.use('/', router)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
-    console.log(`Server running on port ${port}`)
+    console.log(`Server running on port ${PORT}`)
 })
