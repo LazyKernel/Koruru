@@ -1,7 +1,9 @@
 require('dotenv').config()
 const express = require('express')
+const cors = require('cors')
 const { Pool } = require('pg')
 const Router = require('express-promise-router')
+
 app = express()
 const router = new Router()
 
@@ -17,6 +19,7 @@ router.get('/api/cards/:fromIdx&:numCards', async (req, res) => {
     res.json(qry.rows)
 })
 
+app.use(cors())
 app.use('/', router)
 
 const PORT = process.env.PORT
