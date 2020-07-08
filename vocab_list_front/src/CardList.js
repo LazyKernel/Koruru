@@ -69,7 +69,7 @@ const Vocab = ({vocab}) => {
                 <Card.Title>{vocab.vocab_jp}</Card.Title>
                 <Card.Subtitle>{vocab.vocab_en}</Card.Subtitle>
                 <Card.Text></Card.Text>
-                <Card.Text>{vocab.japanese.split(' ').map((word, index) => <Word key={index} text={word} />)}<br/>{vocab.english}</Card.Text>
+                <Card.Text>{vocab.japanese.split(' ').map((word, index) => <Word key={index} text={word} />)}<br/><br/>{vocab.english}</Card.Text>
             </Card.Body>
         </Card>
     )
@@ -77,7 +77,7 @@ const Vocab = ({vocab}) => {
 
 const CardList = ({cards}) => {
     return(
-        <Container className="p-3">
+        <Container id="card-list" className="p-3">
             <div id={'cardlist'}>
                 {cards.map(card => <Row key={`card${card.index}`}><Col><Vocab vocab={card}/></Col></Row>)}
             </div>

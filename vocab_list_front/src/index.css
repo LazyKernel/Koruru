@@ -25,3 +25,7 @@ code {
 .form-inline > * {
   margin: 5px;
 }
+
+#card-list > * {
+  font-size-adjust: 0.7;
+}
