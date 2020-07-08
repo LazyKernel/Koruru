@@ -12,6 +12,21 @@ const pool = new Pool({
 })
 
 router.get('/api/cards/:fromIdx&:numCards', async (req, res) => {
+    if (req.params.numCards < 0) {
+        res.status(400).send('Number of cards cannot be negative')
+        return
+    }
+
+    if (req.params.numCards > 1000) {
+        res.status(400).send('Max 1000 cards sent at a time')
+        return
+    }
+
+    if (req.params.fromIdx < 0) {
+        res.status(400).send('Offset cannot be negative')
+        return 
+    }
+
     const qry = await pool.query(
         'SELECT * FROM cards ORDER BY index LIMIT $1::integer OFFSET $2::integer',
         [req.params.numCards, req.params.fromIdx]

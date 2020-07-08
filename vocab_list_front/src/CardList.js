@@ -1,19 +1,26 @@
 import React from 'react'
+import { Container, Row, Col, Card } from 'react-bootstrap'
 
-const Card = ({card}) => {
+const Vocab = ({vocab}) => {
     return(
-        <div>
-            <div className={'vocab'}>{card.vocab_jp} {card.vocab_en}</div>
-            <div className={'sentence'}>{card.japanese} {card.english}</div>
-        </div>
+        <Card className="mt-1">
+            <Card.Body>
+                <Card.Title>{vocab.vocab_jp}</Card.Title>
+                <Card.Subtitle>{vocab.vocab_en}</Card.Subtitle>
+                <Card.Text></Card.Text>
+                <Card.Text>{vocab.japanese}<br/>{vocab.english}</Card.Text>
+            </Card.Body>
+        </Card>
     )
 }
 
 const CardList = ({cards}) => {
     return(
-        <div id={'cardlist'}>
-            {cards.map(card => <Card key={`card${card.index}`} card={card}/>)}
-        </div>
+        <Container className="p-3">
+            <div id={'cardlist'}>
+                {cards.map(card => <Row key={`card${card.index}`}><Col><Vocab vocab={card}/></Col></Row>)}
+            </div>
+        </Container>
     )
 }
 

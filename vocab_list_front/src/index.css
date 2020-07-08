@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -10,4 +10,18 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.spinner-grow {
+  display: block;
+  position: fixed;
+  height: 50vmin;
+  width: 50vmin;
+  z-index: 1031; /* High z-index so it is on top of the page */
+  top: calc( 50% - ( 50vmin / 2) ); /* where ... is the element's height */
+  right: calc( 50% - ( 50vmin / 2) ); /* where ... is the element's width */
+}
+
+.form-inline > * {
+  margin: 5px;
 }
