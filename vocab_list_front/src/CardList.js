@@ -6,7 +6,7 @@ const Word = ({text}) => {
     const getWord = () => {
         const re = /(.*)\[.*\]/g
         const match = re.exec(text)
-        console.log('word', match)
+
         if (match !== null) {
             return match[1]
         }
@@ -17,7 +17,7 @@ const Word = ({text}) => {
     const getReading = () => {
         const re = /.*\[(.*),.*\]|\[(.*);.*\]/g
         const match = re.exec(text)
-        console.log('reading', match)
+
         if (match !== null) {
             return match[1] || match[2]
         }
@@ -28,7 +28,6 @@ const Word = ({text}) => {
     const getStyle = () => {
         const re = /(n[\d]{1,2})|(k[\d]{1,2})+?|[hanok]/g
         const match = re.exec(text)
-        console.log('style', match)
 
         if (match) {
             switch (match[0][0]) {
