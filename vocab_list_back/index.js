@@ -3,6 +3,8 @@ const express = require('express')
 const cors = require('cors')
 const { Pool } = require('pg')
 const Router = require('express-promise-router')
+const https = require('https')
+const fs = require('fs')
 
 app = express()
 const router = new Router()
@@ -38,6 +40,9 @@ app.use(cors())
 app.use('/', router)
 
 const PORT = process.env.PORT
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
-})
+const sslOptions = {
+    key: fs.readFileSync(''),
+    cert: fs.readFileSync('')
+}
+
+https.createServer(sslOptions, app).listen(PORT)
