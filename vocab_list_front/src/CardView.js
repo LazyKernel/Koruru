@@ -61,7 +61,7 @@ const CardView = ({limit, offset}) => {
         <div>
             <CardList cards={cards} />
         </div>
-        <ButtonToolbar className="justify-content-between">
+        <ButtonToolbar style={{ paddingBottom: "20px" }} className="justify-content-between">
             <Button style={previousButtonStyle()} onClick={() => handleClick(-1)}>← Previous</Button>
             <Button style={nextButtonStyle()} onClick={() => handleClick(1)}>Next →</Button>
         </ButtonToolbar>
