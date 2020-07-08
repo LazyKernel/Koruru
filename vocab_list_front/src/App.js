@@ -28,9 +28,12 @@ const App = () => {
   return (
     <div className="container">
       <Navbar bg="dark" expand="lg" variant="dark">
+        <Navbar.Brand style={{ paddingLeft: "5px" }}>
+          Core 2k list
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Form variant="dark" inline>
+        <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
+          <Form inline variant="dark">
             <Form.Label className="text-light" htmlFor="cards_per_page">Cards per page</Form.Label>
             <Form.Control type="number" id="cards_per_page" name="cards_per_page" placeholder="Cards per page" min="1" value={limit} onChange={handleChange}></Form.Control>
           </Form>
