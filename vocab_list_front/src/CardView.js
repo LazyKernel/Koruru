@@ -11,7 +11,7 @@ const CardView = ({limit, offset}) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const result = await axios.get(`http://koruru.org:3001/api/cards/${offset}&${limit}`)
+            const result = await axios.get(`https://koruru.org:3001/api/cards/${offset}&${limit}`)
             setCards(result.data)
             setDisplaySpinner(false)
         }
