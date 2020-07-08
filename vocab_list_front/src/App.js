@@ -1,15 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import CardView from './CardView';
 import { Navbar, Form } from 'react-bootstrap'
 import { Route, withRouter, Switch } from 'react-router-dom'
+import Cookies from 'universal-cookie'
 
 const App = () => {
   const [limit, setLimit] = useState(11)
+  const cookies = new Cookies()
 
   const handleChange = (event) => {
+    cookies.set('page-card-limit', event.target.value, { sameSite: 'strict' })
     setLimit(event.target.value)
   }
+
+  useEffect(() => {
+    const lim = cookies.get('page-card-limit')
+
+    if (lim === undefined) {
+      cookies.set('page-card-limit', limit, { sameSite: 'strict' })
+    } 
+    else {
+      setLimit(lim)
+    }
+  }, [limit, cookies])
 
   return (
     <div className="container">
