@@ -11,7 +11,7 @@ node_modules
 /coverage
 
 # production
-/build
+vocab_list_front/build
 
 # misc
 .DS_Store
