@@ -41,8 +41,8 @@ app.use('/', router)
 
 const PORT = process.env.PORT
 const sslOptions = {
-    key: fs.readFileSync(''),
-    cert: fs.readFileSync('')
+    key: fs.readFileSync('/etc/letsencrypt/live/koruru.org/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/koruru.org/fullchain.pem')
 }
 
 https.createServer(sslOptions, app).listen(PORT)
