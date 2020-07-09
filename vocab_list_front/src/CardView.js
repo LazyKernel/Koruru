@@ -49,6 +49,7 @@ const CardView = ({limit, offset, searchTerm}) => {
         // do a count(*) or make a table with aggregated data since the data in db
         // pretty much never changes at the moment.
         // Checking cards.length is a very bad way of not showing the next button but ehh, who cares
+        // eslint-disable-next-line
         if (offset < 2006 && cards.length == limit) {
             style.visibility = 'visible'
         }
