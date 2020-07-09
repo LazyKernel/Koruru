@@ -51,10 +51,10 @@ router.get('/api/cards/search/:fromIdx&:numCards&:term', async (req, res) => {
 
     const qry = await pool.query(
         "SELECT * FROM cards " +
-        "WHERE vocab_jp LIKE '%$3%' OR vocab_en LIKE '%$3%' OR japanese LIKE '%$3%' OR english LIKE '%$3%' " +
-        "ORDER BY index, vocab_jp LIKE '%$3%', vocab_en LIKE '%$3%' " +
-        "LIMIT $1::integer OFFSET $2::integer",
-        [req.params.numCards, req.params.fromIdx, req.params.term]
+        "WHERE vocab_jp LIKE '%$1%' OR vocab_en LIKE '%$1%' OR japanese LIKE '%$1%' OR english LIKE '%$1%' " +
+        "ORDER BY index, vocab_jp LIKE '%$1%', vocab_en LIKE '%$1%' " +
+        "LIMIT $2::integer OFFSET $3::integer",
+        [req.params.term, req.params.numCards, req.params.fromIdx]
     )
     res.json(qry.rows)
 })

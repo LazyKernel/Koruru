@@ -11,10 +11,13 @@ const CardView = ({limit, offset, searchTerm}) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            let uri = `https://koruru.org:3001/api/cards/${offset}&${limit}`
+            let uri = null 
 
             if (searchTerm && searchTerm.trim()) {
-                uri += `&${searchTerm.trim()}`
+                uri = `https://koruru.org:3001/api/cards/search/${offset}&${limit}&${searchTerm.trim()}`
+            }
+            else {
+                uri = `https://koruru.org:3001/api/cards/${offset}&${limit}`
             }
 
             const result = await axios.get(uri)
