@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import CardView from './CardView';
-import { Navbar, Form } from 'react-bootstrap'
+import { Navbar, Form, FormControl, InputGroup, Button } from 'react-bootstrap'
 import { Route, withRouter, Switch } from 'react-router-dom'
 import Cookies from 'universal-cookie'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
 const App = () => {
   const [limit, setLimit] = useState(11)
   const cookies = new Cookies()
-
-  const handleChange = (event) => {
-    cookies.set('page-card-limit', event.target.value, { sameSite: 'strict' })
-    setLimit(event.target.value)
-  }
 
   useEffect(() => {
     const lim = cookies.get('page-card-limit')
@@ -25,6 +22,19 @@ const App = () => {
     }
   }, [limit, cookies])
 
+  const handleChange = (event) => {
+    cookies.set('page-card-limit', event.target.value, { sameSite: 'strict' })
+    setLimit(event.target.value)
+  }
+
+  const preventSubmitHandler = (event) => {
+    event.preventDefault()
+  }
+
+  const handleSearchSubmit = (event) => {
+    event.preventDefault()
+  }
+
   return (
     <div className="container">
       <Navbar bg="dark" expand="lg" variant="dark">
@@ -33,9 +43,17 @@ const App = () => {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-          <Form inline variant="dark">
+          <Form inline variant="dark" onSubmit={preventSubmitHandler}>
             <Form.Label className="text-light" htmlFor="cards_per_page">Cards per page</Form.Label>
             <Form.Control type="number" id="cards_per_page" name="cards_per_page" placeholder="Cards per page" min="1" value={limit} onChange={handleChange}></Form.Control>
+          </Form>
+          <Form inline variant="dark" onSubmit={handleSearchSubmit}>
+            <InputGroup>
+              <FormControl type="text" placeholder="Search" />
+              <InputGroup.Append>
+                <Button variant="light"><FontAwesomeIcon icon={faSearch} /></Button>
+              </InputGroup.Append>
+            </InputGroup>
           </Form>
         </Navbar.Collapse>
       </Navbar>
