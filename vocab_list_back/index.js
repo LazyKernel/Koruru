@@ -13,25 +13,48 @@ const pool = new Pool({
     connectionString: process.env.DB_URI
 })
 
+const checkLimitOffset = (limit, offset) => {
+    if (limit < 0) {
+        res.status(400).send()
+        return 'Number of cards cannot be negative'
+    }
+
+    if (limit > 1000) {
+        return 'Max 1000 cards sent at a time'
+    }
+
+    if (offset < 0) {
+        return 'Offset cannot be negative'
+    }
+
+    return null
+}
+
 router.get('/api/cards/:fromIdx&:numCards', async (req, res) => {
-    if (req.params.numCards < 0) {
-        res.status(400).send('Number of cards cannot be negative')
-        return
-    }
-
-    if (req.params.numCards > 1000) {
-        res.status(400).send('Max 1000 cards sent at a time')
-        return
-    }
-
-    if (req.params.fromIdx < 0) {
-        res.status(400).send('Offset cannot be negative')
-        return 
+    const errorMsg = checkLimitOffset(req.params.numCards, req.params.fromIdx)
+    if (errorMsg !== null) {
+        res.status(400).send(errorMsg)
     }
 
     const qry = await pool.query(
         'SELECT * FROM cards ORDER BY index LIMIT $1::integer OFFSET $2::integer',
         [req.params.numCards, req.params.fromIdx]
+    )
+    res.json(qry.rows)
+})
+
+router.get('/api/cards/search/:fromIdx&:numCards&:term', async (req, res) => {
+    const errorMsg = checkLimitOffset(req.params.numCards, req.params.fromIdx)
+    if (errorMsg !== null) {
+        res.status(400).send(errorMsg)
+    }
+
+    const qry = await pool.query(
+        "SELECT * FROM cards " +
+        "WHERE vocab_jp LIKE '%$3%' OR vocab_en LIKE '%$3%' OR japanese LIKE '%$3%' OR english LIKE '%$3%' " +
+        "ORDER BY index, vocab_jp LIKE '%$3%', vocab_en LIKE '%$3%' " +
+        "LIMIT $1::integer OFFSET $2::integer",
+        [req.params.numCards, req.params.fromIdx, req.params.term]
     )
     res.json(qry.rows)
 })
