@@ -59,7 +59,7 @@ const App = () => {
             <Form.Label className="text-light" htmlFor="cards_per_page">Cards per page</Form.Label>
             <Form.Control type="number" id="cards_per_page" name="cards_per_page" placeholder="Cards per page" min="1" value={limit} onChange={handleChange}></Form.Control>
           </Form>
-          <Form inline variant="dark" onSubmit={handleSearchSubmit}>
+          <Form inline variant="dark" value={searchBoxValue} onSubmit={handleSearchSubmit}>
             <InputGroup>
               <FormControl type="text" placeholder="Search" onChange={handleSearchBoxChange} />
               <InputGroup.Append>
