@@ -52,7 +52,7 @@ router.get('/api/cards/search/:fromIdx&:numCards&:term', async (req, res) => {
     const qry = await pool.query(
         "SELECT * FROM cards " +
         "WHERE vocab_jp LIKE $1::text OR vocab_en LIKE $1::text OR japanese LIKE $1::text OR english LIKE $1::text " +
-        "ORDER BY index, vocab_jp LIKE $1::text, vocab_en LIKE $1 " +
+        "ORDER BY vocab_jp LIKE $1::text, vocab_en LIKE $1::text, index " +
         "LIMIT $2::integer OFFSET $3::integer",
         [`%${req.params.term}%`, req.params.numCards, req.params.fromIdx]
     )

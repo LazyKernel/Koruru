@@ -1,25 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import CardList from './CardList'
-import { ButtonToolbar, Button, Spinner } from 'react-bootstrap'
+import { ButtonToolbar, Button, Spinner, Alert } from 'react-bootstrap'
 import { Redirect } from 'react-router-dom'
 
-const CardView = ({limit, offset}) => {
+const SearchView = ({limit, offset, searchTerm}) => {
     const [cards, setCards] = useState([])
     const [newOffset, setNewOffset] = useState(-1)
     const [displaySpinner, setDisplaySpinner] = useState(false)
 
     useEffect(() => {
         const fetchData = async () => {
-            const result = await axios.get(`https://koruru.org:3001/api/cards/${offset}&${limit}`)
-            setCards(result.data)
-            setDisplaySpinner(false)
+            if (searchTerm) {
+                const result = await axios.get(`https://koruru.org:3001/api/cards/search/${offset}&${limit}&${searchTerm.trim()}`)
+                setCards(result.data)
+                setDisplaySpinner(false)
+            }
         }
 
         setDisplaySpinner(true)
         fetchData()
         setNewOffset(-1)
-    }, [limit, offset])
+    }, [limit, offset, searchTerm])
 
     const handleClick = (multiplier) => {
         let nOffset = parseInt(offset) + (parseInt(limit) * parseInt(multiplier))
@@ -51,12 +53,20 @@ const CardView = ({limit, offset}) => {
     }
 
     if (newOffset >= 0) {
-        return <Redirect to={`/${newOffset}`} />
+        return <Redirect to={`/search/${newOffset}`} />
+    }
+
+    if (!searchTerm) {
+        return <Alert variant="danger">Please enter a search term</Alert>
     }
 
     if (displaySpinner) {
         return <Spinner animation="grow" variant="dark" />
     } 
+
+    if (cards.length <= 0) {
+        return <Alert variant="info">No results for '<i>{searchTerm}</i>'</Alert>
+    }
 
     return(
         <>
@@ -71,4 +81,4 @@ const CardView = ({limit, offset}) => {
     )
 }
 
-export default CardView
+export default SearchView

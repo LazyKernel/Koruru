@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import './App.css';
-import CardView from './CardView';
+import CardView from './CardView'
+import SearchView from './SearchView'
 import { Navbar, Form, FormControl, InputGroup, Button } from 'react-bootstrap'
 import { Route, withRouter, Switch } from 'react-router-dom'
 import Cookies from 'universal-cookie'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
-const App = () => {
+const App = (props) => {
   const [searchTerm, setSearchTerm] = useState('')
   const [searchBoxValue, setSearchBoxValue] = useState('')
   const [limit, setLimit] = useState(11)
@@ -39,7 +40,11 @@ const App = () => {
 
   const handleSearchSubmit = (event) => {
     event.preventDefault()
-    setSearchTerm(searchBoxValue)
+    setSearchTerm(searchBoxValue.trim())
+
+    if (searchBoxValue && searchBoxValue.trim()) {
+      props.history.push('/search')
+    }
   }
 
   const clearSearch = () => {
@@ -50,7 +55,7 @@ const App = () => {
   return (
     <div className="container">
       <Navbar bg="dark" expand="lg" variant="dark">
-        <Navbar.Brand href="#" onClick={clearSearch} style={{ paddingLeft: "5px" }}>
+        <Navbar.Brand href="/" onClick={clearSearch} style={{ paddingLeft: "5px" }}>
           Core 2k list
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -71,10 +76,12 @@ const App = () => {
       </Navbar>
       <Switch>
         <Route exact path='/' render={() => <CardView limit={limit} offset={0} searchTerm={searchTerm}/>} />
-        <Route path='/:offset' render={(props) => <CardView limit={limit} offset={props.match.params.offset} searchTerm={searchTerm}/>}/>
+        <Route exact path='/search' render={() => <SearchView limit={limit} offset={0} searchTerm={searchTerm}/>}/>
+        <Route path='/search/:offset' render={(props) => <SearchView limit={limit} offset={props.match.params.offset} searchTerm={searchTerm}/>}/>
+        <Route path='/:offset' render={(props) => <CardView limit={limit} offset={props.match.params.offset}/>}/>
       </Switch>
     </div>
   );
 }
 
-export default withRouter(App);
+export default withRouter(App)
