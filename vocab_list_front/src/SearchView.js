@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import CardList from './CardList'
-import { ButtonToolbar, Button, Spinner, Alert } from 'react-bootstrap'
+import { ButtonToolbar, Button, Spinner, Container, Col, Row } from 'react-bootstrap'
 import { Redirect } from 'react-router-dom'
 
-const SearchView = ({limit, offset, searchTerm}) => {
+const SearchView = ({limit, offset, searchTerm, cardViewOffset}) => {
     const [cards, setCards] = useState([])
     const [newOffset, setNewOffset] = useState(-1)
     const [displaySpinner, setDisplaySpinner] = useState(false)
@@ -52,32 +52,65 @@ const SearchView = ({limit, offset, searchTerm}) => {
         return style
     }
 
+    const getSpinner = () => {
+        if (displaySpinner) { 
+            return <Spinner animation="grow" variant="dark" /> 
+        }
+    }
+
+    const getInfoMessage = () => {
+        if (!searchTerm) {
+            return(
+                <Container className="justify-content-between p-3">
+                    <Row>
+                        <Col>Please enter a search term</Col>
+                        <Col className="text-right"><a href={`/${cardViewOffset || 0}`}>← Back to list</a></Col>
+                    </Row>
+                </Container>
+            )
+        }
+    
+        if (cards.length <= 0 && !displaySpinner) {
+            return(
+                <Container className="justify-content-between p-3">
+                    <Row>
+                        <Col>No results for '<i>{searchTerm}</i>'</Col>
+                        <Col className="text-right"><a href={`/${cardViewOffset || 0}`}>← Back to list</a></Col>
+                    </Row>
+                </Container>
+            )
+        }
+
+        return(
+            <>
+            <Container className="justify-content-between p-3">
+                <Row>
+                    <Col>Results for '<i>{searchTerm}</i>'</Col>
+                    <Col className="text-right"><a href={`/${cardViewOffset || 0}`}>← Back to list</a></Col>
+                </Row>
+            </Container>
+            {getSpinner()}
+            </>
+        )
+    }
+
     if (newOffset >= 0) {
-        return <Redirect to={`/search/${newOffset}`} />
-    }
-
-    if (!searchTerm) {
-        return <Alert variant="danger">Please enter a search term</Alert>
-    }
-
-    if (displaySpinner) {
-        return <Spinner animation="grow" variant="dark" />
-    } 
-
-    if (cards.length <= 0) {
-        return <Alert variant="info">No results for '<i>{searchTerm}</i>'</Alert>
+        return <Redirect to={`/search/${newOffset}&${cardViewOffset}`} />
     }
 
     return(
-        <>
         <div>
-            <CardList cards={cards} />
+            <div>
+                {getInfoMessage()}
+            </div>
+            <div>
+                <CardList cards={cards} />
+            </div>
+            <ButtonToolbar style={{ paddingBottom: "20px" }} className="justify-content-between">
+                <Button style={previousButtonStyle()} onClick={() => handleClick(-1)}>← Previous</Button>
+                <Button style={nextButtonStyle()} onClick={() => handleClick(1)}>Next →</Button>
+            </ButtonToolbar>
         </div>
-        <ButtonToolbar style={{ paddingBottom: "20px" }} className="justify-content-between">
-            <Button style={previousButtonStyle()} onClick={() => handleClick(-1)}>← Previous</Button>
-            <Button style={nextButtonStyle()} onClick={() => handleClick(1)}>Next →</Button>
-        </ButtonToolbar>
-        </>
     )
 }
 

@@ -43,7 +43,7 @@ const App = (props) => {
     setSearchTerm(searchBoxValue.trim())
 
     if (searchBoxValue && searchBoxValue.trim()) {
-      props.history.push('/search')
+      props.history.push(`/search/0&${props.location.pathname.substring(1) || 0}`)
     }
   }
 
@@ -68,16 +68,16 @@ const App = (props) => {
             <InputGroup>
               <FormControl type="text" placeholder="Search" onChange={handleSearchBoxChange} value={searchBoxValue} />
               <InputGroup.Append>
-                <Button variant="light"><FontAwesomeIcon icon={faSearch} /></Button>
+                <Button variant="light" type="submit"><FontAwesomeIcon icon={faSearch} /></Button>
               </InputGroup.Append>
             </InputGroup>
           </Form>
         </Navbar.Collapse>
       </Navbar>
       <Switch>
-        <Route exact path='/' render={() => <CardView limit={limit} offset={0} searchTerm={searchTerm}/>} />
+        <Route exact path='/' render={() => <CardView limit={limit} offset={0}/>} />
         <Route exact path='/search' render={() => <SearchView limit={limit} offset={0} searchTerm={searchTerm}/>}/>
-        <Route path='/search/:offset' render={(props) => <SearchView limit={limit} offset={props.match.params.offset} searchTerm={searchTerm}/>}/>
+        <Route path='/search/:offset&:prevOffset' render={(props) => <SearchView limit={limit} offset={props.match.params.offset} searchTerm={searchTerm} cardViewOffset={props.match.params.prevOffset}/>}/>
         <Route path='/:offset' render={(props) => <CardView limit={limit} offset={props.match.params.offset}/>}/>
       </Switch>
     </div>
