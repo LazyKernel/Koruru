@@ -37,7 +37,7 @@ router.get('/api/cards/:fromIdx&:numCards', async (req, res) => {
     }
 
     const qry = await pool.query(
-        'SELECT * FROM cards ORDER BY index LIMIT $1::integer OFFSET $2::integer',
+        'SELECT * FROM core2k ORDER BY due LIMIT $1::integer OFFSET $2::integer',
         [req.params.numCards, req.params.fromIdx]
     )
     res.json(qry.rows)
@@ -50,9 +50,9 @@ router.get('/api/cards/search/:fromIdx&:numCards&:term', async (req, res) => {
     }
 
     const qry = await pool.query(
-        "SELECT * FROM cards " +
+        "SELECT * FROM core2k " +
         "WHERE vocab_jp LIKE $1::text OR vocab_en LIKE $1::text OR japanese LIKE $1::text OR english LIKE $1::text " +
-        "ORDER BY NOT vocab_jp LIKE $1::text, NOT vocab_en LIKE $1::text, index " +
+        "ORDER BY NOT vocab_jp LIKE $1::text, NOT vocab_en LIKE $1::text, due " +
         "LIMIT $2::integer OFFSET $3::integer",
         [`%${req.params.term}%`, req.params.numCards, req.params.fromIdx]
     )

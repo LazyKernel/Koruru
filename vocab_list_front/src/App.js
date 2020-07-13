@@ -43,7 +43,15 @@ const App = (props) => {
     setSearchTerm(searchBoxValue.trim())
 
     if (searchBoxValue && searchBoxValue.trim()) {
-      props.history.push(`/search/0&${props.location.pathname.substring(1) || 0}`)
+      const re = /&(\d+)|\/(\d+)/
+      const match = re.exec(props.location.pathname)
+
+      if (!match) {
+        props.history.push('/search/0&0')
+        return
+      }
+
+      props.history.push(`/search/0&${match[1] || match[2] || 0}`)
     }
   }
 
