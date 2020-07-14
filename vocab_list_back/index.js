@@ -48,11 +48,11 @@ const getSearchQuery = (term) => {
         jp_arr.push(interpretations.kanji)
     }
 
-    let combinations = [...jp_arr]
+    let combinations = [...jp_arr.map(e => `%${e}%`)]
     jp_arr = jp_arr.map(e => e.split(''))
     jp_arr.forEach(e => {
         for (i = 1; i < e.length; i++) {
-            combinations.push('%' + e.reduce((p, c, idx) => (idx == i) ? p + ']' + c : p + c, '') + '%')
+            combinations.push(`%${e.reduce((p, c, idx) => (idx == i) ? p + ']' + c : p + c, '')}%`)
         }
     })
 
