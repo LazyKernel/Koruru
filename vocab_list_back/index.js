@@ -31,6 +31,43 @@ const checkLimitOffset = (limit, offset) => {
     return null
 }
 
+const getSearchQuery = (term) => {
+    // Extremely efficient and optimized search engine by yours truly
+    let where = "WHERE vocab_jp LIKE $1::text OR vocab_en LIKE $1::text OR japanese LIKE $1::text OR english LIKE $1::text "
+    let order = "ORDER BY NOT vocab_jp LIKE $1::text, "
+    const interpretations = converter.convert(term)
+    console.log(interpretations)
+    let jp_arr = []
+    if (interpretations.hiragana) {
+        jp_arr.push(interpretations.hiragana)
+    }
+    if (interpretations.katakana) {
+        jp_arr.push(interpretations.katakana)
+    }
+    if (interpretations.kanji) {
+        jp_arr.push(interpretations.kanji)
+    }
+
+    jp_arr = jp_arr.map(e => e.split(''))
+    let combinations = []
+    jp_arr.forEach(e => {
+        for (i = 1; i < e.length; i++) {
+            combinations.push(e.reduce((p, c, idx) => (idx == i) ? p + ']' + c : p + c, ''))
+        }
+    })
+
+    combinations.forEach((e, i) => { 
+        where += `OR vocab_jp LIKE $${i + 2}::text`
+        order += `NOT vocab_jp LIKE $${i + 2}::text, `
+    })
+
+    order += "NOT vocab_en LIKE $1::text, due "
+
+    let pagination = `LIMIT $${combinations.length + 2}::integer OFFSET $${combinations.length + 3}::integer`
+
+    return { query: where + order + pagination, combinations: combinations }
+}
+
 /*
 Currently we have to make sure that index is counting up in the same order as due
 (this is done in postgres manually) for offsets to display correctly in frontend 
@@ -57,14 +94,12 @@ router.get('/api/cards/search/:fromIdx&:numCards&:term', async (req, res) => {
         res.status(400).send(errorMsg)
     }
 
-    const interpretations = converter.convert(req.params.term)
-    console.log(interpretations)
+    const searchQry = getSearchQuery(req.params.term)
+    console.log(searchQry)
     const qry = await pool.query(
         "SELECT * FROM core2k " +
-        "WHERE vocab_jp LIKE $1::text OR vocab_en LIKE $1::text OR japanese LIKE $1::text OR english LIKE $1::text " +
-        "ORDER BY NOT vocab_jp LIKE $1::text, NOT vocab_en LIKE $1::text, due " +
-        "LIMIT $2::integer OFFSET $3::integer",
-        [`%${req.params.term}%`, req.params.numCards, req.params.fromIdx]
+        searchQry.query,
+        [`%${req.params.term}%`, ...searchQry.combinations, req.params.numCards, req.params.fromIdx]
     )
     res.json(qry.rows)
 })
