@@ -57,7 +57,7 @@ const getSearchQuery = (term) => {
     })
 
     combinations.forEach((e, i) => { 
-        where += `OR vocab_jp LIKE $${i + 2}::text`
+        where += `OR vocab_jp LIKE $${i + 2}::text `
         order += `NOT vocab_jp LIKE $${i + 2}::text, `
     })
 
