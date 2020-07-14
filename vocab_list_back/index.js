@@ -5,6 +5,7 @@ const { Pool } = require('pg')
 const Router = require('express-promise-router')
 const https = require('https')
 const fs = require('fs')
+const converter = require('jp-conversion')
 
 app = express()
 const router = new Router()
@@ -30,6 +31,13 @@ const checkLimitOffset = (limit, offset) => {
     return null
 }
 
+/*
+Currently we have to make sure that index is counting up in the same order as due
+(this is done in postgres manually) for offsets to display correctly in frontend 
+Due is taken straight from Anki and it is only guaranteed to be in the right order
+but there might be (and usually are) gaps between cards
+*/
+
 router.get('/api/cards/:fromIdx&:numCards', async (req, res) => {
     const errorMsg = checkLimitOffset(req.params.numCards, req.params.fromIdx)
     if (errorMsg !== null) {
@@ -49,6 +57,8 @@ router.get('/api/cards/search/:fromIdx&:numCards&:term', async (req, res) => {
         res.status(400).send(errorMsg)
     }
 
+    const interpretations = converter.convert(req.params.term)
+    console.log(interpretations)
     const qry = await pool.query(
         "SELECT * FROM core2k " +
         "WHERE vocab_jp LIKE $1::text OR vocab_en LIKE $1::text OR japanese LIKE $1::text OR english LIKE $1::text " +
