@@ -36,7 +36,7 @@ const getSearchQuery = (term) => {
     let where = "WHERE vocab_jp LIKE $1::text OR vocab_en LIKE $1::text OR japanese LIKE $1::text OR english LIKE $1::text "
     let order = "ORDER BY NOT vocab_jp LIKE $1::text, "
     const interpretations = converter.convert(term)
-    console.log(interpretations)
+
     let jp_arr = []
     if (interpretations.hiragana) {
         jp_arr.push(interpretations.hiragana)
@@ -95,7 +95,7 @@ router.get('/api/cards/search/:fromIdx&:numCards&:term', async (req, res) => {
     }
 
     const searchQry = getSearchQuery(req.params.term)
-    console.log(searchQry)
+
     const qry = await pool.query(
         "SELECT * FROM core2k " +
         searchQry.query,
