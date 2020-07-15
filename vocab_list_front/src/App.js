@@ -40,18 +40,22 @@ const App = (props) => {
 
   const handleSearchSubmit = (event) => {
     event.preventDefault()
+    event.target.blur()
     setSearchTerm(searchBoxValue.trim())
 
     if (searchBoxValue && searchBoxValue.trim()) {
-      const re = /&(\d+)|\/(\d+)/
-      const match = re.exec(props.location.pathname)
+      // can't or these together
+      const re1 = /&(\d+)/
+      const re2 = /\/(\d+)/
+      const match1 = re1.exec(props.location.pathname)
+      const match2 = re2.exec(props.location.pathname)
 
-      if (!match) {
+      if (!match1 && !match2) {
         props.history.push('/search/0&0')
         return
       }
-
-      props.history.push(`/search/0&${match[1] || match[2] || 0}`)
+      
+      props.history.push(`/search/0&${match1 ? match1[1] : null || match2 ? match2[1] : null || 0}`)
     }
   }
 
