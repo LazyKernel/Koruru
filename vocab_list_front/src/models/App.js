@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import './App.css';
+import '../css/App.css';
 import CardView from './CardView'
 import SearchView from './SearchView'
 import KanjiSearch from './KanjiSearch'
