@@ -96,7 +96,7 @@ const App = (props) => {
       <Switch>
         <Route exact path='/' render={() => <CardView limit={limit} offset={0}/>} />
         <Route exact path='/search' render={() => <SearchView limit={limit} offset={0} searchTerm={searchTerm}/>}/>
-        <Route exact path='/search/kanji' render={() => <KanjiSearch />} />
+        <Route exact path='/kanji' render={() => <KanjiSearch />} />
         <Route path='/search/:offset&:prevOffset' render={(props) => <SearchView limit={limit} offset={props.match.params.offset} searchTerm={searchTerm} cardViewOffset={props.match.params.prevOffset}/>}/>
         <Route path='/:offset' render={(props) => <CardView limit={limit} offset={props.match.params.offset}/>}/>
       </Switch>

@@ -12,7 +12,8 @@ const KanjiSearch = () => {
     useEffect(() => {
         const fetchData = async () => {
             if (!suggestions.length) {
-                const result= await axios.get(`https://koruru.org:3001/api/kanji/search`)
+                const result = await axios.get(`https://koruru.org:3001/api/kanji/search`)
+                console.log(result)
                 setSuggestions(result.data)
                 setDisplaySpinner(false)
             }
