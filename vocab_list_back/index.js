@@ -108,6 +108,13 @@ router.get('/api/kanji/search/:term', async (req, res) => {
     res.json(qry.rows)
 })
 
+router.get('/api/kanji/search', async (req, res) => {
+    const qry = await pool.query(
+        'SELECT meaning FROM kanjidmg_en'
+    )
+    res.json(qry.rows)
+})
+
 app.use(cors())
 app.use('/', router)
 
