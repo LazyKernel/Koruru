@@ -33,7 +33,6 @@ const KanjiSearchBox = ({suggestions, tags, setTags}) => {
 
 
     const onSuggestionSelected = (e, { suggestion }) => {
-        console.log(suggestion)
         setTags([...tags, suggestion])
         setAutoSuggestValue('')
     }
@@ -52,6 +51,11 @@ const KanjiSearchBox = ({suggestions, tags, setTags}) => {
 
     const focusAutoSuggest = () => {
         autoSuggestInput.current.focus()
+    }
+
+    const shouldRenderSuggestions = (value) => {
+        const suggestions = getSuggestions(value)
+        return suggestions.length <= 10
     }
 
 
@@ -104,6 +108,7 @@ const KanjiSearchBox = ({suggestions, tags, setTags}) => {
             getSuggestionValue={getSuggestionValue}
             renderSuggestion={renderSuggestion}
             renderSuggestionsContainer={renderSuggestionsContainer}
+            shouldRenderSuggestions={shouldRenderSuggestions}
             inputProps={inputProps}
         />
     )
