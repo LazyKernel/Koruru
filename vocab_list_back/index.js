@@ -112,7 +112,7 @@ router.get('/api/kanji/search/:term', async (req, res) => {
 
 router.get('/api/kanji/search', async (req, res) => {
     const qry = await pool.query(
-        'SELECT meaning FROM kanjidmg_en WHERE NOT has_image'
+        'SELECT distinct(meaning) FROM kanjidmg_en WHERE NOT has_image'
     )
     res.json(qry.rows.map(v => v['meaning']))
 })

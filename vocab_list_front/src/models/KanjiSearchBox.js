@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react'
-import { Container, Row, Col, Card, Collapse, ListGroupItem } from 'react-bootstrap'
+import { Container, Row, Col, Card, Collapse, ListGroupItem, Dropdown } from 'react-bootstrap'
 import AutoSuggest from 'react-autosuggest'
 import TagsInput from 'react-tagsinput'
+import { Portal } from 'react-portal'
 
 const KanjiSearchBox = ({suggestions, tags, setTags}) => {
 
@@ -33,18 +34,31 @@ const KanjiSearchBox = ({suggestions, tags, setTags}) => {
     const renderSuggestion = suggestion => {
         if (suggestion === highlightedSuggestion) {
             return (
-                <ListGroupItem active>
+                <Dropdown.Item active={true}>
                     {suggestion}
-                </ListGroupItem>
+                </Dropdown.Item>
             )
         }
         
            return (
-            <ListGroupItem>
+            <Dropdown.Item>
                 {suggestion}
-            </ListGroupItem>
+            </Dropdown.Item>
         )
     }
+
+    const renderSuggestionsContainer = ({ containerProps, children, query }) => {
+        return (
+            <Dropdown show={true}>
+                <Portal>
+                    <Dropdown.Menu show={true}>
+                        {children}
+                    </Dropdown.Menu>
+                </Portal>
+            </Dropdown>
+        )
+    }
+
 
     const onSuggestionSelected = (e, {  suggestion }) => {
         setTags([...tags, suggestion])
@@ -64,7 +78,6 @@ const KanjiSearchBox = ({suggestions, tags, setTags}) => {
     }
 
     const focusAutoSuggest = () => {
-        console.log('called')
         autoSuggestInput.current.focus()
     }
 
@@ -90,6 +103,7 @@ const KanjiSearchBox = ({suggestions, tags, setTags}) => {
             onSuggestionsClearRequested={onSuggestionsClearRequested}
             getSuggestionValue={getSuggestionValue}
             renderSuggestion={renderSuggestion}
+            renderSuggestionsContainer={renderSuggestionsContainer}
             inputProps={inputProps}
         />
     )

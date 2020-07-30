@@ -4,7 +4,7 @@ import CardView from './CardView'
 import SearchView from './SearchView'
 import KanjiSearch from './KanjiSearch'
 import { Navbar, Nav, Form, FormControl, InputGroup, Button, Container } from 'react-bootstrap'
-import { Route, withRouter, Switch } from 'react-router-dom'
+import { Route, withRouter, Switch, NavLink } from 'react-router-dom'
 import Cookies from 'universal-cookie'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
@@ -74,8 +74,8 @@ const App = (props) => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav>
-            <Nav.Link variant="dark" href="/" onClick={clearSearch}>Core 2k</Nav.Link>
-            <Nav.Link variant="dark" href="/kanji" onClick={clearSearch}>Kanji Search</Nav.Link>
+            <Nav.Link as={NavLink} variant="dark" exact to="/" onClick={clearSearch}>Core 2k</Nav.Link>
+            <Nav.Link as={NavLink} variant="dark" exact to="/kanji" onClick={clearSearch}>Kanji Search</Nav.Link>
           </Nav>
           {/*<Form inline variant="dark" onSubmit={preventSubmitHandler}>
             <Form.Label className="text-light" htmlFor="cards_per_page">Cards per page</Form.Label>

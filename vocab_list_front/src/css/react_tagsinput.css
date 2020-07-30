@@ -54,6 +54,7 @@
 
 .react-autosuggest__input {
   border-style: none;
+  padding: 5px;
 }
 
 #kanji-search-box {
