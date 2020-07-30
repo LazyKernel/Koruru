@@ -35,7 +35,8 @@ const getSearchQuery = (term) => {
     // Extremely efficient and optimized search engine by yours truly
     let where = "WHERE vocab_jp LIKE $1::text OR vocab_en LIKE $1::text OR japanese LIKE $1::text OR english LIKE $1::text "
     let order = "ORDER BY NOT vocab_jp LIKE $1::text, "
-    const interpretations = converter.convert(term)
+    const newTerm = converter.convert(term.replace('nn', 'nnn'))
+    const interpretations = converter.convert(newTerm)
 
     let jp_arr = []
     if (interpretations.hiragana) {
@@ -87,7 +88,8 @@ router.get('/api/cards/search/:fromIdx&:numCards&:term', async (req, res) => {
         res.status(400).send(errorMsg)
     }
 
-    const searchQry = getSearchQuery(req.params.term)
+    const termLower = req.params.term.toLowerCase()
+    const searchQry = getSearchQuery(termLower)
 
     const qry = await pool.query(
         "SELECT * FROM core2k " +
@@ -110,7 +112,7 @@ router.get('/api/kanji/search/:term', async (req, res) => {
 
 router.get('/api/kanji/search', async (req, res) => {
     const qry = await pool.query(
-        'SELECT meaning FROM kanjidmg_en'
+        'SELECT meaning FROM kanjidmg_en WHERE NOT has_image'
     )
     res.json(qry.rows.map(v => v['meaning']))
 })
