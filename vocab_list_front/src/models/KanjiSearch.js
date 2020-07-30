@@ -4,6 +4,7 @@ import KanjiSearchBox from './KanjiSearchBox'
 import { ButtonToolbar, Form, FormControl, InputGroup, Button, Spinner, Container, Col, Row } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import qs from 'qs'
 
 const KanjiSearch = () => {
     const [terms, setTerms] = useState([])
@@ -36,10 +37,16 @@ const KanjiSearch = () => {
         if (terms.length <= 0)
             return
 
-        const termsStr = terms.map((t, i) => (i === 0) ? `?term=${t}` : `&term=${t}`)
+        //const termsStr = terms.map((t, i) => (i === 0) ? `?term=${t}` : `&term=${t}`)
         //const termsStr = terms.join(',')
         const fetchData = async () => {
-            const result = await axios.get(`https://koruru.org:3001/api/kanji/search${termsStr}`)
+            const result = await axios.get(`https://koruru.org:3001/api/kanji/search`,
+                {
+                    params: {
+                        term: terms
+                    }
+                }
+            )
             console.log(result.data)
             setCards(result.data)
         }

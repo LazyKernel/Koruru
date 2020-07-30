@@ -99,13 +99,13 @@ router.get('/api/cards/search/:fromIdx&:numCards&:term', async (req, res) => {
     res.json(qry.rows)
 })
 
-router.get('/api/kanji/search', async (req, res) => {
+router.get('/api/kanji/search/', async (req, res) => {
     let query = 'SELECT * FROM kanjidmg_en INNER JOIN kanjidmg USING (nid) WHERE '
-    req.params.term.forEach((v, i) => query += `meaning LIKE $${i + 1}::text `)
+    req.query.term.forEach((v, i) => query += `meaning LIKE $${i + 1}::text `)
 
     const qry = await pool.query(
         query,
-        [...req.params.term.map(v => `%${v}%`)]
+        [...req.query.term.map(v => `%${v}%`)]
     )
     res.json(qry.rows)
 })
