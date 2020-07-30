@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import KanjiSearchBox from './KanjiSearchBox'
-import { ButtonToolbar, Button, Spinner, Container, Col, Row } from 'react-bootstrap'
+import { ButtonToolbar, Form, FormControl, InputGroup, Button, Spinner, Container, Col, Row } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
 const KanjiSearch = () => {
     const [terms, setTerms] = useState([])
@@ -11,17 +13,15 @@ const KanjiSearch = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            if (!suggestions.length) {
-                const result = await axios.get(`https://koruru.org:3001/api/kanji/search`)
-                console.log(result)
-                setSuggestions(result.data)
-                setDisplaySpinner(false)
-            }
+            const result = await axios.get(`https://koruru.org:3001/api/kanji/search`)
+            console.log(result)
+            setSuggestions(result.data)
+            setDisplaySpinner(false)
         }
 
         setDisplaySpinner(true)
         fetchData()
-    }, [suggestions])
+    }, [])
 
     const getSpinner = () => {
         if (displaySpinner) { 
@@ -29,11 +29,37 @@ const KanjiSearch = () => {
         }
     }
 
+    const handleSearchSubmit = (event) => {
+        event.preventDefault()
+        event.target.blur()
+        //setSearchTerm(searchBoxValue.trim())
+    
+        /*if (searchBoxValue && searchBoxValue.trim()) {
+          // can't or these together
+          const re1 = /&(\d+)/
+          const re2 = /\/(\d+)/
+          const match1 = re1.exec(props.location.pathname)
+          const match2 = re2.exec(props.location.pathname)
+    
+          if (!match1 && !match2) {
+            props.history.push('/search/0&0')
+            return
+          }
+          
+          props.history.push(`/search/0&${match1 ? match1[1] : null || match2 ? match2[1] : null || 0}`)
+        }*/
+      }
+
     return(
         <div>
-            <div>
-                <KanjiSearchBox suggestions={suggestions} tags={terms} setTags={setTerms} />
-            </div>
+            <Container className="pt-3 pb-3">
+                <Form variant="dark" onSubmit={handleSearchSubmit}>
+                    <h3>KanjiDamage Keyword Search</h3>
+                    <p>Search Jukugo by writing the keywords of each individual kanji in order. Search automatically suggests possible keywords.</p>
+                    <KanjiSearchBox suggestions={suggestions} tags={terms} setTags={setTerms} />
+                    <Button className="float-right" variant="light" type="submit"><FontAwesomeIcon icon={faSearch} /> Search</Button>
+                </Form>
+            </Container>
         </div>
     )
 }
