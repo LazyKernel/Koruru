@@ -108,7 +108,7 @@ router.get('/api/kanji/search/', async (req, res) => {
     }
 
     let query = 'SELECT * FROM kanjidmg_en INNER JOIN kanjidmg USING (nid) WHERE '
-    req.query.term.forEach((v, i) => query += (i === 0) ? '' : 'OR ' + `meaning LIKE $${i + 1}::text `)
+    req.query.term.forEach((v, i) => query += ((i === 0) ? '' : 'OR ') + `meaning LIKE $${i + 1}::text `)
 
     const qry = await pool.query(
         query,
