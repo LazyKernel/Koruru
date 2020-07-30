@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { Container, Row, Col, Card, Collapse, ListGroupItem, Dropdown } from 'react-bootstrap'
+import { Container, ButtonGroup, Row, Col, Card, Collapse, ListGroupItem, Dropdown } from 'react-bootstrap'
 import AutoSuggest from 'react-autosuggest'
 import TagsInput from 'react-tagsinput'
 import { Portal } from 'react-portal'
@@ -31,36 +31,9 @@ const KanjiSearchBox = ({suggestions, tags, setTags}) => {
 
     const getSuggestionValue = suggestion => suggestion
 
-    const renderSuggestion = suggestion => {
-        if (suggestion === highlightedSuggestion) {
-            return (
-                <Dropdown.Item active={true}>
-                    {suggestion}
-                </Dropdown.Item>
-            )
-        }
-        
-           return (
-            <Dropdown.Item>
-                {suggestion}
-            </Dropdown.Item>
-        )
-    }
 
-    const renderSuggestionsContainer = ({ containerProps, children, query }) => {
-        return (
-            <Dropdown show={true}>
-                <Portal>
-                    <Dropdown.Menu show={true}>
-                        {children}
-                    </Dropdown.Menu>
-                </Portal>
-            </Dropdown>
-        )
-    }
-
-
-    const onSuggestionSelected = (e, {  suggestion }) => {
+    const onSuggestionSelected = (e, { suggestion }) => {
+        console.log(suggestion)
         setTags([...tags, suggestion])
         setAutoSuggestValue('')
     }
@@ -79,6 +52,33 @@ const KanjiSearchBox = ({suggestions, tags, setTags}) => {
 
     const focusAutoSuggest = () => {
         autoSuggestInput.current.focus()
+    }
+
+
+    const renderSuggestion = suggestion => {
+        if (suggestion === highlightedSuggestion) {
+            return (
+                <ListGroupItem active={true} onClick={(e) => onSuggestionSelected(e, { suggestion })}>
+                    {suggestion}
+                </ListGroupItem>
+            )
+        }
+        
+           return (
+            <ListGroupItem onClick={(e) => onSuggestionSelected(e, { suggestion })}>
+                {suggestion}
+            </ListGroupItem>
+        )
+    }
+
+    const renderSuggestionsContainer = ({ containerProps, children, query }) => {
+        return (
+            <Dropdown show={true} {...containerProps}>
+                <Dropdown.Menu show={true}>
+                    {children}
+                </Dropdown.Menu>
+            </Dropdown>
+        )
     }
 
 
