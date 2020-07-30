@@ -73,6 +73,7 @@ router.get('/api/cards/:fromIdx&:numCards', async (req, res) => {
     const errorMsg = checkLimitOffset(req.params.numCards, req.params.fromIdx)
     if (errorMsg !== null) {
         res.status(400).send(errorMsg)
+        return
     }
 
     const qry = await pool.query(
@@ -86,6 +87,7 @@ router.get('/api/cards/search/:fromIdx&:numCards&:term', async (req, res) => {
     const errorMsg = checkLimitOffset(req.params.numCards, req.params.fromIdx)
     if (errorMsg !== null) {
         res.status(400).send(errorMsg)
+        return
     }
 
     const termLower = req.params.term.toLowerCase()
@@ -100,8 +102,13 @@ router.get('/api/cards/search/:fromIdx&:numCards&:term', async (req, res) => {
 })
 
 router.get('/api/kanji/search/', async (req, res) => {
+    if (req.query.term.length <= 0) {
+        res.status(400).send('You must include at least one term')
+        return
+    }
+
     let query = 'SELECT * FROM kanjidmg_en INNER JOIN kanjidmg USING (nid) WHERE '
-    req.query.term.forEach((v, i) => query += `meaning LIKE $${i + 1}::text `)
+    req.query.term.forEach((v, i) => query += (i === 0) ? '' : 'OR ' + `meaning LIKE $${i + 1}::text `)
 
     const qry = await pool.query(
         query,
