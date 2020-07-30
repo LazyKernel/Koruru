@@ -15,7 +15,7 @@ const KanjiSearch = () => {
         const fetchData = async () => {
             const result = await axios.get(`https://koruru.org:3001/api/kanji/search`)
             console.log(result)
-            setSuggestions(result.data)
+            setSuggestions(result.data.map((v, i) => { return { id: i + '', text: v }}))
             setDisplaySpinner(false)
         }
 
@@ -23,9 +23,17 @@ const KanjiSearch = () => {
         fetchData()
     }, [])
 
-    const getSpinner = () => {
+    const getSearchBox = () => {
         if (displaySpinner) { 
             return <Spinner animation="grow" variant="dark" /> 
+        }
+        else {
+            return (
+                <>
+                    <KanjiSearchBox suggestions={suggestions} tags={terms} setTags={setTerms} />
+                    <Button className="float-right" variant="light" type="submit"><FontAwesomeIcon icon={faSearch} /> Search</Button>
+                </>
+            )
         }
     }
 
@@ -56,8 +64,7 @@ const KanjiSearch = () => {
                 <Form variant="dark" onSubmit={handleSearchSubmit}>
                     <h3>KanjiDamage Keyword Search</h3>
                     <p>Search Jukugo by writing the keywords of each individual kanji in order. Search automatically suggests possible keywords.</p>
-                    <KanjiSearchBox suggestions={suggestions} tags={terms} setTags={setTerms} />
-                    <Button className="float-right" variant="light" type="submit"><FontAwesomeIcon icon={faSearch} /> Search</Button>
+                    {getSearchBox()}
                 </Form>
             </Container>
         </div>
