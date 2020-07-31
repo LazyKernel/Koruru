@@ -36,7 +36,8 @@ const getSearchQuery = (term) => {
     // Extremely efficient and optimized search engine by yours truly
     let where = "WHERE vocab_jp LIKE $1::text OR vocab_en LIKE $1::text OR japanese LIKE $1::text OR english LIKE $1::text "
     let order = "ORDER BY NOT vocab_jp LIKE $1::text, "
-    const newTerm = converter.convert(term.replace('nn', 'nnn'))
+    const regex = /nn/gi
+    const newTerm = term.replace(regex, 'nnn')
     const interpretations = converter.convert(newTerm)
 
     let jp_arr = []
