@@ -126,7 +126,7 @@ router.get('/api/kanji/list', async (req, res) => {
 })
 
 router.get('/api/jisho/:keyword', async (req, res) => {
-    const result = await axios.get(`https://jisho.org/api/v1/search/words?keyword=${req.params.keyword}`)
+    const result = await axios.get(`https://jisho.org/api/v1/search/words?keyword=${encodeURI(req.params.keyword)}`)
     res.json(result.data)
 })
 
