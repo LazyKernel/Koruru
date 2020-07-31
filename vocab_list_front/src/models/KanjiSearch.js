@@ -78,7 +78,8 @@ const KanjiSearch = () => {
             const jishoResults = []
             possibleJukugo.forEach(async e => {
                 const jishoRes = await axios.get(`https://koruru.org:3001/api/jisho/${e}`)
-                jishoResults.push(jishoRes)
+                const data = jishoRes.data.data.filter(v => v.attribution.jmdict || v.attribution.jmnedict)
+                jishoResults.push(data)
             })
             
             console.log(jishoResults)
