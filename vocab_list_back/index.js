@@ -112,7 +112,7 @@ router.get('/api/kanji/search/', async (req, res) => {
 
     const qry = await pool.query(
         query,
-        [...req.query.term.map(v => `%${v}%`)]
+        [...req.query.term.map(v => `${v}`)]
     )
     res.json(qry.rows)
 })

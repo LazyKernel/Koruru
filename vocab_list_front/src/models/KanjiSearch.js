@@ -9,6 +9,7 @@ import qs from 'qs'
 const KanjiSearch = () => {
     const [terms, setTerms] = useState([])
     const [suggestions, setSuggestions] = useState([])
+    const [kanjis, setKanjis] = useState([])
     const [cards, setCards] = useState([])
     const [displaySpinner, setDisplaySpinner] = useState(false)
 
@@ -37,8 +38,6 @@ const KanjiSearch = () => {
         if (terms.length <= 0)
             return
 
-        //const termsStr = terms.map((t, i) => (i === 0) ? `?term=${t}` : `&term=${t}`)
-        //const termsStr = terms.join(',')
         const fetchData = async () => {
             const result = await axios.get(`https://koruru.org:3001/api/kanji/search`,
                 {
@@ -48,7 +47,9 @@ const KanjiSearch = () => {
                 }
             )
             console.log(result.data)
-            setCards(result.data)
+            setKanjis(result.data)
+
+            //const jishoResult = await axios.get(`https://jisho.org/api/v1/search/words?keyword=${}`)
         }
 
         fetchData()
