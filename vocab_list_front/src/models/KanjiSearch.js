@@ -46,10 +46,42 @@ const KanjiSearch = () => {
                     }
                 }
             )
-            console.log(result.data)
             setKanjis(result.data)
 
-            //const jishoResult = await axios.get(`https://jisho.org/api/v1/search/words?keyword=${}`)
+            const combinationArrays = {}
+            terms.forEach(e => {
+                combinationArrays[e] = []
+            })
+
+            result.data.forEach(e => {
+                if (e.meaning in combinationArrays) {
+                    combinationArrays[e.meaning].push(e)
+                }
+            })
+
+            var possibleJukugo = []
+            for (var key in combinationArrays) {
+                var copy = possibleJukugo.slice()
+                possibleJukugo = []
+                combinationArrays[key].forEach(e => {
+                    if (copy.length <= 0) {
+                        possibleJukugo.push(e.kanji)
+                    }
+                    else {
+                        copy.forEach(c => {
+                            possibleJukugo.push(c + e.kanji)
+                        })
+                    }
+                })
+            }
+
+            const jishoResults = []
+            possibleJukugo.forEach(async e => {
+                const jishoRes = await axios.get(`https://koruru.org:3001/api/jisho/${e}`)
+                jishoResults.push(jishoRes)
+            })
+            
+            console.log(jishoResults)
         }
 
         fetchData()

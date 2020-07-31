@@ -6,6 +6,7 @@ const Router = require('express-promise-router')
 const https = require('https')
 const fs = require('fs')
 const converter = require('jp-conversion')
+const axios = require('axios')
 
 app = express()
 const router = new Router()
@@ -122,6 +123,11 @@ router.get('/api/kanji/list', async (req, res) => {
         'SELECT distinct(meaning) FROM kanjidmg_en WHERE NOT has_image'
     )
     res.json(qry.rows.map(v => v['meaning']))
+})
+
+router.get('/api/jisho/:keyword', async (req, res) => {
+    const result = await axios.get(`https://jisho.org/api/v1/search/words?keyword=${req.params.keyword}`)
+    res.json(result.data)
 })
 
 app.use(cors())
