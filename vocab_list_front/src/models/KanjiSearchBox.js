@@ -1,8 +1,7 @@
 import React, { useState, useRef } from 'react'
-import { Container, ButtonGroup, Row, Col, Card, Collapse, ListGroupItem, Dropdown } from 'react-bootstrap'
+import { Container, ListGroupItem, Dropdown } from 'react-bootstrap'
 import AutoSuggest from 'react-autosuggest'
 import TagsInput from 'react-tagsinput'
-import { Portal } from 'react-portal'
 
 const KanjiSearchBox = ({suggestions, tags, setTags}) => {
 
@@ -91,10 +90,6 @@ const KanjiSearchBox = ({suggestions, tags, setTags}) => {
         value: autoSuggestValue,
         onChange: handleSuggestChange,
         ref: autoSuggestInput
-    }
-
-    const theme = {
-        suggestionsContainer: 'list-group'
     }
 
 

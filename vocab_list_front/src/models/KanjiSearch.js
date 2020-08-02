@@ -1,26 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import KanjiSearchBox from './KanjiSearchBox'
-import { ButtonToolbar, Form, FormControl, InputGroup, Button, Spinner, Container, Col, Row } from 'react-bootstrap'
+import JishoCard from './JishoCard'
+import { Button, Spinner, Container, Col, Row } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
-import qs from 'qs'
 
 const KanjiSearch = () => {
     const [terms, setTerms] = useState([])
     const [suggestions, setSuggestions] = useState([])
-    const [kanjis, setKanjis] = useState([])
-    const [cards, setCards] = useState([])
+    const [jishoEntries, setJishoEntries] = useState([])
     const [displaySpinner, setDisplaySpinner] = useState(false)
 
     useEffect(() => {
         const fetchData = async () => {
             const result = await axios.get(`https://koruru.org:3001/api/kanji/list`)
             setSuggestions(result.data)
-            setDisplaySpinner(false)
         }
 
-        setDisplaySpinner(true)
         fetchData()
     }, [])
 
@@ -30,10 +27,19 @@ const KanjiSearch = () => {
         }
     }
 
+    const getCardList = () => {
+        console.log('entries', jishoEntries)
+        console.log('map', jishoEntries.map(card => card.slug))
+        return (
+            <Container id="jisho-list" className="p-3">
+                {jishoEntries.map(card => <Row key={`card${card.slug}`}><Col><JishoCard jishoResponse={card}/></Col></Row>)}
+            </Container>
+        )
+    }
+
     const handleSearchSubmit = (event) => {
         event.preventDefault()
         event.target.blur()
-        console.log(terms)
         
         if (terms.length <= 0)
             return
@@ -46,7 +52,6 @@ const KanjiSearch = () => {
                     }
                 }
             )
-            setKanjis(result.data)
 
             const combinationArrays = {}
             terms.forEach(e => {
@@ -79,12 +84,14 @@ const KanjiSearch = () => {
             possibleJukugo.forEach(async e => {
                 const jishoRes = await axios.get(`https://koruru.org:3001/api/jisho/${e}`)
                 const data = jishoRes.data.data.filter(v => v.attribution.jmdict || v.attribution.jmnedict)
-                jishoResults.push(data)
+                jishoResults.push(...data)
             })
             
-            console.log(jishoResults)
+            setDisplaySpinner(false)
+            setJishoEntries(jishoResults)
         }
 
+        setDisplaySpinner(true)
         fetchData()
       }
 
@@ -97,6 +104,8 @@ const KanjiSearch = () => {
                 <Button className="float-right" variant="light" onClick={handleSearchSubmit}><FontAwesomeIcon icon={faSearch} /> Search</Button>
             </Container>
             <hr/>
+            {getCardList()}
+            {getSpinner()}
         </div>
     )
 }

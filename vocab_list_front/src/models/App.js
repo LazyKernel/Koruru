@@ -26,18 +26,21 @@ const App = (props) => {
     }
   }, [limit, cookies])
 
-  const handleChange = (event) => {
-    cookies.set('page-card-limit', event.target.value, { sameSite: 'strict' })
-    setLimit(event.target.value)
-  }
+  
 
   const handleSearchBoxChange = (event) => {
     setSearchBoxValue(event.target.value)
   }
 
+  /*
+  const handleChange = (event) => {
+    cookies.set('page-card-limit', event.target.value, { sameSite: 'strict' })
+    setLimit(event.target.value)
+  }
+
   const preventSubmitHandler = (event) => {
     event.preventDefault()
-  }
+  }*/
 
   const handleSearchSubmit = (event) => {
     event.preventDefault()
