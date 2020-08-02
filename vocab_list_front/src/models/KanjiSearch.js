@@ -28,13 +28,17 @@ const KanjiSearch = () => {
     }
 
     const getCardList = () => {
-        console.log('entries', jishoEntries)
-        console.log('map', jishoEntries.map(card => card.slug))
         return (
             <Container id="jisho-list" className="p-3">
                 {jishoEntries.map(card => <Row key={`card${card.slug}`}><Col><JishoCard jishoResponse={card}/></Col></Row>)}
             </Container>
         )
+    }
+
+    const asyncForEach = async (array, callback) => {
+        for (let index = 0; index < array.length; index++) {
+            await callback(array[index], index, array);
+        }
     }
 
     const handleSearchSubmit = (event) => {
@@ -81,7 +85,7 @@ const KanjiSearch = () => {
             }
 
             const jishoResults = []
-            possibleJukugo.forEach(async e => {
+            await asyncForEach(possibleJukugo, async e => {
                 const jishoRes = await axios.get(`https://koruru.org:3001/api/jisho/${e}`)
                 const data = jishoRes.data.data.filter(v => v.attribution.jmdict || v.attribution.jmnedict)
                 jishoResults.push(...data)

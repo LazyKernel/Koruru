@@ -29,3 +29,11 @@ code {
 #card-list > * {
   font-size-adjust: 0.7;
 }
+
+.jisho-word > * {
+  font-size-adjust: 0.7;
+}
+
+.full-width {
+  width: 100%;
+}

@@ -3,7 +3,7 @@ import { Container, Row, Col, Card, Collapse, Badge } from 'react-bootstrap'
 import ReactFuri from 'react-furi'
 
 const Word = ({ wordObj }) => {
-    return <ReactFuri word={wordObj.word} reading={wordObj.reading} style={{ fontFamily: 'inherit' }} />
+    return <ReactFuri className="jisho-word" word={wordObj.word} reading={wordObj.reading} style={{ fontFamily: 'inherit' }} />
 }
 
 const JishoCard = ({ jishoResponse }) => {
@@ -31,15 +31,21 @@ const JishoCard = ({ jishoResponse }) => {
             <Card.Body onClick={handleClick}>
                 <Container>
                     <Row>
+                        <Col xs={3} sm={2} md={2} lg={2} xl={2}>
+                            {getBadge()}<br/>
+                            {/* there shouldn't be multiple jlpt levels */}
+                            {getJlpt()}
+                        </Col>
                         <Col>
                             <Card.Title><Word wordObj={jishoResponse.japanese[0]} /></Card.Title>
                             <Card.Text></Card.Text>
-                            <ol>{jishoResponse.senses.map((e, i) => <li key={`english${i}`}>{e.parts_of_speech.join(',')}: {e.english_definitions.join(',')}</li>)}</ol>
-                        </Col>
-                        <Col>
-                            {getBadge()}
-                            {/* there shouldn't be multiple jlpt levels */}
-                            {getJlpt()}
+                            <ol>
+                                {jishoResponse.senses.map((e, i) => 
+                                    <li key={`english${i}`}>
+                                        {e.parts_of_speech.join(', ')}: {e.english_definitions.join(', ')}
+                                    </li>)
+                                }
+                            </ol>
                         </Col>
                     </Row>
                 </Container>
@@ -49,7 +55,7 @@ const JishoCard = ({ jishoResponse }) => {
                     <Card.Footer>
                         <Container className="justify-content-between">
                             <Row>
-                                <Col><Card.Link href={`https://jisho.org/search/${jishoResponse.slug}`} target="_blank">Jisho</Card.Link></Col>
+                                <Col><Card.Link href={`https://jisho.org/word/${jishoResponse.slug}`} target="_blank">Jisho</Card.Link></Col>
                                 <Col className="text-muted text-right"><small><i>Slug: {jishoResponse.slug}</i></small></Col>
                             </Row>
                         </Container>
