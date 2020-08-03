@@ -61,14 +61,14 @@ const KanjiSearchBox = ({suggestions, tags, setTags}) => {
     const renderSuggestion = suggestion => {
         if (suggestion === highlightedSuggestion) {
             return (
-                <ListGroupItem active={true} onClick={(e) => onSuggestionSelected(e, { suggestion })}>
+                <ListGroupItem active={true}>
                     {suggestion}
                 </ListGroupItem>
             )
         }
         
            return (
-            <ListGroupItem onClick={(e) => onSuggestionSelected(e, { suggestion })}>
+            <ListGroupItem>
                 {suggestion}
             </ListGroupItem>
         )
@@ -105,6 +105,7 @@ const KanjiSearchBox = ({suggestions, tags, setTags}) => {
             renderSuggestionsContainer={renderSuggestionsContainer}
             shouldRenderSuggestions={shouldRenderSuggestions}
             inputProps={inputProps}
+            highlightFirstSuggestion={true}
         />
     )
 
