@@ -54,7 +54,7 @@ const KanjiSearchBox = ({suggestions, tags, setTags}) => {
 
     const shouldRenderSuggestions = (value) => {
         const suggestions = getSuggestions(value)
-        return suggestions.length <= 10
+        return suggestions.length <= 10 || suggestions.includes(value)
     }
 
 
@@ -75,6 +75,13 @@ const KanjiSearchBox = ({suggestions, tags, setTags}) => {
     }
 
     const renderSuggestionsContainer = ({ containerProps, children, query }) => {
+        // sorting the array in place, react needs assignment
+        // eslint-disable-next-line 
+        const c = children?.props.items.sort((a, b) => {
+            const aShort = a.replace(query, '')
+            const bShort = b.replace(query, '')
+            return aShort.length - bShort.length
+        })
         return (
             <Dropdown show={true} {...containerProps}>
                 <Dropdown.Menu show={true}>
