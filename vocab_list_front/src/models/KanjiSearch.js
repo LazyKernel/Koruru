@@ -11,6 +11,7 @@ const KanjiSearch = () => {
     const [suggestions, setSuggestions] = useState([])
     const [jishoEntries, setJishoEntries] = useState([])
     const [displaySpinner, setDisplaySpinner] = useState(false)
+    const [kanjiSearched, setKanjiSearched] = useState([])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -27,11 +28,25 @@ const KanjiSearch = () => {
         }
     }
 
+    const getSearchInfo = () => {
+        if (kanjiSearched.length > 0) {
+            return (
+                <Container>
+                    <p>Searched for: {kanjiSearched.join(', ')}</p>
+                    <p>Found {jishoEntries.length} {jishoEntries.length === 1 ? 'result' : 'results'}.</p>
+                </Container>
+            )
+        }
+    }
+
     const getCardList = () => {
         return (
+            <>
+            {getSearchInfo()}
             <Container id="jisho-list" className="p-3">
                 {jishoEntries.map(card => <Row key={`card${card.slug}`}><Col><JishoCard jishoResponse={card}/></Col></Row>)}
             </Container>
+            </>
         )
     }
 
@@ -83,6 +98,8 @@ const KanjiSearch = () => {
                     }
                 })
             }
+
+            setKanjiSearched(possibleJukugo)
 
             const jishoResults = []
             await asyncForEach(possibleJukugo, async e => {
