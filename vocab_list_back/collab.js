@@ -34,16 +34,52 @@ const addDeck = async (req, res) => {
 } 
 
 const addOperation = async (req, res) => {
-    
+    const errors = {}
+    if (!req.body?.ignoreCoreDuplicate) {
+        const qry = await pool.query(
+            'SELECT * FROM core2k WHERE pure_vocab_jp = $1',
+            [req.body.vocab_jp]
+        )
+
+        if (qry.rowCount > 0) {
+            errors.coreDuplicate = qry.rows
+        }
+    }
+
+    if (!req.body?.ignoreDuplicate) {
+        const qry = await pool.query(
+            "SELECT * FROM (SELECT DISTINCT ON (card_id) * FROM koruru_collab.operation WHERE deck_id = $1 AND word_jp = $2 ORDER BY operation_id DESC) WHERE type != 'delete'",
+            [req.params.id, req.body.word_jp]
+        )
+
+        if (qry.rowCount > 0) {
+            errors.operationDuplicate = qry.rows
+        }
+    }
+
+    if (!Object.keys(errors).length) {
+        res.status(400).json(errors)
+        return
+    }
 
     try {
-        const qry = await pool.query(
-            '',
+        const maxQry = await pool.query(
+            'SELECT max(operation_id) as operation_id FROM koruru_collab.operation WHERE deck_id = $1',
             [req.params.id]
         )
+
+        const operation_id = maxQry.rows[0].operation_id + 1
+
+        const qry = await pool.query(
+            "INSERT INTO koruru_collab.operation(deck_id, operation_id, type, word_jp, word_en, sentence_jp, sentence_en) VALUES ($1, $2, 'add', $3, $4, $5, $6) RETURNING *",
+            [req.params.id, operation_id, req.body.word_jp, req.body.word_en, req.body.sentence_jp, req.body.sentence_en]
+        )
+
+        res.json(qry.rows)
     }
     catch (e) {
-
+        console.log(e)
+        res.status(400).json({message: "An error occurred, deck id probably doesn't exist."})
     }
 }
 
