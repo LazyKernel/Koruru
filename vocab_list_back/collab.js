@@ -8,19 +8,24 @@ const pool = new Pool({
 })
 
 const listAllOperations = async (req, res) => {
-    const qry = await pool.query(
-        'SELECT * from koruru_collab.operation WHERE deck_id = $1 ORDER BY operation_id ASC',
+    const deckQry = await pool.query(
+        'SELECT * FROM koruru_collab.deck WHERE deck_id = $1',
         [req.params.id]
     )
-    res.json(qry.rows)
+
+    const qry = await pool.query(
+        'SELECT * FROM koruru_collab.operation WHERE deck_id = $1 ORDER BY operation_id ASC',
+        [req.params.id]
+    )
+    res.json({token: deckQry.rows[0].id, name: deckQry.rows[0].name, operations: qry.rows})
 }
 
 const listAllOperationsFrom = async (req, res) => {
     const qry = await pool.query(
-        'SELECT * from koruru_collab.operation WHERE deck_id = $1 and operation_id > $2 ORDER BY operation_id ASC',
+        'SELECT * FROM koruru_collab.operation WHERE deck_id = $1 and operation_id > $2 ORDER BY operation_id ASC',
         [req.params.id, req.params.fromOp]
     )
-    res.json(qry.rows)
+    res.json({operations: qry.rows})
 }
 
 
