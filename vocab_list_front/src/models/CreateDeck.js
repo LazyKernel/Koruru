@@ -22,7 +22,7 @@ const CreateDeck = () => {
         }
 
         if (response.name.length > 0) {
-            return <p>Token for deck {response.name}: {response.id}</p>
+            return <p>Token for deck '{response.name}': {response.id}</p>
         }
     }
 
