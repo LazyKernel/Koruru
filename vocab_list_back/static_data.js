@@ -124,4 +124,4 @@ const jishoProxy = async (req, res) => {
     res.json(result.data)
 }
 
-export default { getCards, searchCards, searchKanji, getKanjiSuggestions, jishoProxy }
+module.exports = { getCards, searchCards, searchKanji, getKanjiSuggestions, jishoProxy }

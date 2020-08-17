@@ -89,4 +89,4 @@ const addOperation = async (req, res) => {
 }
 
 
-export default { listAllOperations, listAllOperationsFrom, addDeck, addOperation }
+module.exports = { listAllOperations, listAllOperationsFrom, addDeck, addOperation }
