@@ -53,7 +53,7 @@ const addOperation = async (req, res) => {
 
     if (!req.body?.ignoreDuplicate) {
         const qry = await pool.query(
-            "SELECT * FROM (SELECT DISTINCT ON (card_id) * FROM koruru_collab.operation WHERE deck_id = $1 AND word_jp = $2 ORDER BY operation_id DESC) WHERE type != 'delete'",
+            "SELECT * FROM (SELECT * FROM koruru_collab.operation WHERE deck_id = '' AND word_jp = '' ORDER BY operation_id DESC LIMIT 1) as subsel WHERE type != 'delete'",
             [req.params.id, req.body.word_jp]
         )
 
