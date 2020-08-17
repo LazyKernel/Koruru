@@ -76,8 +76,8 @@ const addOperation = async (req, res) => {
         const operation_id = maxQry.rows[0].operation_id + 1
 
         const qry = await pool.query(
-            "INSERT INTO koruru_collab.operation(deck_id, operation_id, type, word_jp, word_en, sentence_jp, sentence_en) VALUES ($1, $2, 'add', $3, $4, $5, $6) RETURNING *",
-            [req.params.id, operation_id, req.body.word_jp, req.body.word_en, req.body.sentence_jp, req.body.sentence_en]
+            "INSERT INTO koruru_collab.operation(deck_id, operation_id, type, word_jp, word_en, sentence_jp, sentence_en, pitches) VALUES ($1, $2, 'add', $3, $4, $5, $6, $7) RETURNING *",
+            [req.params.id, operation_id, req.body.word_jp, req.body.word_en, req.body.sentence_jp, req.body.sentence_en, JSON.stringify(req.body.pitches)]
         )
 
         res.json(qry.rows)
@@ -89,4 +89,4 @@ const addOperation = async (req, res) => {
 }
 
 
-export { listAllOperations, listAllOperationsFrom, addDeck, addOperation }
+export default { listAllOperations, listAllOperationsFrom, addDeck, addOperation }
