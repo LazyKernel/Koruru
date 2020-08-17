@@ -12,7 +12,7 @@ const CreateDeck = () => {
         setDisplaySpinner(true)
         
         const response = await axios.post('https://koruru.org:3001/api/collab/decks', {name: name})
-        setResponse(response)
+        setResponse(response.data)
         setDisplaySpinner(false)
     }
 

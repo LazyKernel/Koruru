@@ -35,7 +35,7 @@ const addDeck = async (req, res) => {
         'INSERT INTO koruru_collab.deck(id, name) VALUES ($1, $2) RETURNING *',
         [token, req.body.name]
     )
-    res.json(qry.rows)
+    res.json(qry.rows[0])
 } 
 
 const addOperation = async (req, res) => {
