@@ -62,9 +62,8 @@ const addOperation = async (req, res) => {
         }
     }
 
-    if (!Object.keys(errors).length) {
+    if (Object.keys(errors).length) {
         res.status(400).json(errors)
-        console.log(errors)
         return
     }
 
