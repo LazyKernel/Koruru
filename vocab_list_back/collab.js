@@ -67,8 +67,6 @@ const addOperation = async (req, res) => {
         return
     }
 
-    console.log(req.body)
-
     try {
         const maxQry = await pool.query(
             'SELECT max(operation_id) as operation_id FROM koruru_collab.operation WHERE deck_id = $1',

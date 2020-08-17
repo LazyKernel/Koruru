@@ -13,20 +13,20 @@ app.use(express.json())
 const router = new Router()
 
 // Routes for getting "static" data
-router.get('/api/cards/:fromIdx&:numCards', static_data.getCards)
-router.get('/api/cards/search/:fromIdx&:numCards&:term', static_data.searchCards)
-router.get('/api/kanji/search/', static_data.searchKanji)
-router.get('/api/kanji/list', static_data.getKanjiSuggestions)
-router.get('/api/jisho/:keyword', static_data.jishoProxy)
+router.get('/cards/:fromIdx&:numCards', static_data.getCards)
+router.get('/cards/search/:fromIdx&:numCards&:term', static_data.searchCards)
+router.get('/kanji/search/', static_data.searchKanji)
+router.get('/kanji/list', static_data.getKanjiSuggestions)
+router.get('/jisho/:keyword', static_data.jishoProxy)
 
 // Routes for interacting with KoruruCollab
-router.get('/api/collab/:id', collab.listAllOperations)
-router.get('/api/collab/:id&:fromOp', collab.listAllOperationsFrom)
-router.post('/api/collab/decks', collab.addDeck)
-router.post('/api/collab/operations/:id', collab.addOperation)
+router.get('/collab/:id', collab.listAllOperations)
+router.get('/collab/:id&:fromOp', collab.listAllOperationsFrom)
+router.post('/collab/decks', collab.addDeck)
+router.post('/collab/operations/:id', collab.addOperation)
 
 app.use(cors())
-app.use('/', router)
+app.use('/api', router)
 
 const PORT = process.env.PORT
 const sslOptions = {
