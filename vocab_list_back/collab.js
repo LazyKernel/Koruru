@@ -42,7 +42,7 @@ const addOperation = async (req, res) => {
     const errors = {}
     if (!req.body?.ignoreCoreDuplicate) {
         const qry = await pool.query(
-            'SELECT * FROM core2k WHERE pure_vocab_jp = $1',
+            'SELECT * FROM core2k WHERE vocab_jp = $1',
             [req.body.vocab_jp]
         )
 
