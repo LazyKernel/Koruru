@@ -9,7 +9,7 @@ const pool = new Pool({
 
 const listAllOperations = async (req, res) => {
     const deckQry = await pool.query(
-        'SELECT * FROM koruru_collab.deck WHERE deck_id = $1',
+        'SELECT * FROM koruru_collab.deck WHERE id = $1',
         [req.params.id]
     )
 
