@@ -80,7 +80,6 @@ const App = (props) => {
           <Nav>
             <Nav.Link as={NavLink} variant="dark" exact to="/" onClick={clearSearch}>Core 2k</Nav.Link>
             <Nav.Link as={NavLink} variant="dark" exact to="/kanji" onClick={clearSearch}>Kanji Search</Nav.Link>
-            <Nav.Link as={NavLink} variant="dark" exact to="/decks" onClick={clearSearch}>Decks</Nav.Link>
           </Nav>
           {/*<Form inline variant="dark" onSubmit={preventSubmitHandler}>
             <Form.Label className="text-light" htmlFor="cards_per_page">Cards per page</Form.Label>
@@ -102,7 +101,6 @@ const App = (props) => {
         <Route exact path='/' render={() => <CardView limit={limit} offset={0}/>} />
         <Route exact path='/search' render={() => <SearchView limit={limit} offset={0} searchTerm={searchTerm}/>}/>
         <Route exact path='/kanji' render={() => <KanjiSearch />} />
-        <Route exact path='/decks' render={() => <CreateDeck />} />
         <Route path='/search/:offset&:prevOffset' render={(props) => <SearchView limit={limit} offset={props.match.params.offset} searchTerm={searchTerm} cardViewOffset={props.match.params.prevOffset}/>}/>
         <Route path='/:offset' render={(props) => <CardView limit={limit} offset={props.match.params.offset}/>}/>
       </Switch>
