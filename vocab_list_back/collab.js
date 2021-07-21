@@ -1,11 +1,7 @@
 require('dotenv').config()
-const converter = require('jp-conversion')
-const axios = require('axios')
-const { Pool } = require('pg')
+const creds = require('./credentials')
 
-const pool = new Pool({
-    connectionString: process.env.DB_URI
-})
+const pool = creds.pool
 
 const listAllOperations = async (req, res) => {
     const deckQry = await pool.query(
