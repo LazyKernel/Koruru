@@ -12,8 +12,8 @@ const checkLoginStatus = async (req, res, next) => {
     else if (req.headers.authorization && req.headers.authorization.startsWith('Basic ')) {
         const buffer = Buffer.from(req.headers.authorization.substring(6), 'base64')
         const header = buffer.toString('utf8')
-        const username = header.split(':')[0]
-        const password = header.split(':')[1]
+        const username = header.split(':', 2)[0]
+        const password = header.split(':', 2)[1]
         if (username && password) {
             const password_len = Buffer.byteLength(req.body.password, 'utf8')
 
